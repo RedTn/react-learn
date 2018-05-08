@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+/* global window */
+
 class Note extends Component {
   constructor(props) {
     super(props);
@@ -11,6 +13,34 @@ class Note extends Component {
     this.renderForm = this.renderForm.bind(this);
     this.renderDisplay = this.renderDisplay.bind(this);
     this.save = this.save.bind(this);
+    this.randomBetween = this.randomBetween.bind(this);
+  }
+
+  componentWillMount() {
+    this.style = {
+      right: this.randomBetween(0, window.innerWidth - 150, 'px'),
+      top: this.randomBetween(0, window.innerHeight - 150, 'px'),
+      transform: `rotate(${this.randomBetween(-25, 25, 'deg')})`
+    };
+  }
+
+  randomBetween(x, y, s) {
+    return x + Math.ceil(Math.random() * (y - x)) + s;
+  }
+
+  componentDidUpdate() {
+    let textArea;
+    if (this.state.editing) {
+      textArea = this.newText;
+      textArea.focus();
+      textArea.select();
+    }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return (
+      this.props.children !== nextProps.children || this.state !== nextState
+    );
   }
 
   edit() {
@@ -20,19 +50,23 @@ class Note extends Component {
   }
 
   remove() {
-    console.log('remove');
+    this.props.onRemove(this.props.index);
   }
 
-  save() {
-    console.log(this.newText.value);
+  save(e) {
+    e.preventDefault();
+    this.props.onChange(this.newText.value, this.props.index);
+    this.setState({
+      editing: false
+    });
   }
 
   renderForm() {
     return (
-      <div className="note">
-        <form>
-          <textarea ref={input => this.newText = input} />
-          <button onClick={this.save}>Save</button>
+      <div className="note" style={this.style}>
+        <form onSubmit={this.save}>
+          <textarea ref={input => this.newText = input} defaultValue={this.props.children} />
+          <button>Save</button>
         </form>
       </div>
     )

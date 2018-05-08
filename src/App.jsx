@@ -7,7 +7,7 @@ const App = () => (
   <div className="App">
     <Hello firstName="Bob" />
     <HelloState />
-    <Board />
+    <Board count={50} />
   </div>
 );
 

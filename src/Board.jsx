@@ -1,29 +1,68 @@
 import React, { Component } from 'react';
 import Note from './Note';
 
+/* global fetch */
+
 class Board extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      notes: [
-        {
-          id: 33,
-          note: 'Call Lisa'
-        },
-        {
-          id: 34,
-          note: 'Email John'
-        }
-      ]
+      notes: []
     };
+    this.add = this.add.bind(this);
     this.eachNote = this.eachNote.bind(this);
+    this.update = this.update.bind(this);
+    this.remove = this.remove.bind(this);
+    this.nextId = this.nextId.bind(this);
   }
 
-  eachNote(note, i) {
+  componentWillMount() {
+    const self = this;
+    if (this.props.count) {
+      fetch(`https://baconipsum.com/api/?type=all-meat&sentences=${this.props.count}`)
+        .then(response => response.json())
+        .then(json => json[0].split('. ').forEach(sentence => self.add(sentence.substring(0, 25))));
+    }
+  }
+
+  add(text) {
+    this.setState(prevState => ({
+      notes: [
+        ...prevState.notes,
+        {
+          id: this.nextId(),
+          note: text
+        }
+      ]
+    }));
+  }
+
+  nextId() {
+    this.uniqueId = this.uniqueId || 0;
+    return this.uniqueId++;
+  }
+
+  update(newText, i) {
+    console.log('updating item at index', i, newText);
+    this.setState(prevState => ({
+      notes: prevState.notes.map(note => ((note.id !== i) ? note : { ...note, note: newText }))
+    }));
+  }
+
+  remove(id) {
+    console.log('removing item at', id);
+    this.setState(prevState => ({
+      notes: prevState.notes.filter(note => note.id !== id)
+    }));
+  }
+
+  eachNote(note) {
     return (
       <Note
-        key={i}
-        index={i}
+        key={note.id}
+        index={note.id}
+        onChange={this.update}
+        onRemove={this.remove}
       >
         {note.note}
       </Note>
@@ -34,6 +73,9 @@ class Board extends Component {
     return (
       <div>
         {this.state.notes.map(this.eachNote)}
+        <button onClick={this.add.bind(null, 'New Note')} id="add">
+        Add
+        </button>
       </div>
     );
   }
