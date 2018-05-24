@@ -1,27 +1,32 @@
 {
-  "name": "react-learn",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^16.3.1",
-    "react-dom": "^16.3.1",
-    "react-scripts": "1.1.4"
-  },
+  "name": "ski-day-counter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "lint": "eslint . --max-warnings 0",
-    "lint-fix": "eslint . --fix --max-warnings 0",
-    "prettier": "prettier --single-quote --tab-width 4 --print-width 100 --no-bracket-spacing --arrow-parens always --write \"{src}/**/*.js\""
+    "suggestions": "./node_modules/.bin/babel-node ./server --port 3333 --delay 500",
+    "start": "./node_modules/.bin/webpack-dev-server"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.1",
+    "express": "^4.14.0",
+    "isomorphic-fetch": "^2.2.1",
+    "minimist": "^1.2.0",
+    "redux": "^3.6.0",
+    "redux-thunk": "^2.1.0"
   },
   "devDependencies": {
-    "eslint": "^4.19.1",
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-plugin-import": "^2.10.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.7.0",
-    "prettier": "^1.11.1"
+    "babel-core": "^6.18.0",
+    "babel": "^6.5.2",
+    "babel-cli": "^6.16.0",
+    "babel-loader": "^6.2.6",
+    "babel-preset-latest": "^6.16.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "expect": "^1.20.2",
+    "json-loader": "^0.5.4",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2"
   }
 }
